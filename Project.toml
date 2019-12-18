@@ -1,0 +1,4 @@
+name = "NaiveGraph"
+uuid = "d3601a5c-b0d0-4017-b7b5-3eb406a56a13"
+authors = ["cocomoff <keisuke.otaki.jp@gmail.com>"]
+version = "0.1.0"
