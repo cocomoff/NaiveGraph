@@ -1,7 +1,5 @@
-module NaiveGraph
 
-export Graph
-
+export Graph, copy
 mutable struct Graph
     nV::Int
     nE::Int
@@ -32,7 +30,17 @@ mutable struct Graph
     end
 end
 
-export add_node!, add_edge!, remove_node!, remove_edge!, degree
+function copy(g::Graph)
+    es = Tuple{Int, Int}[]
+    for v in 1:g.nV
+        for u in g.adj[v]
+            push!(es, (v, u))
+        end
+    end
+    Graph(es)
+end
+
+export add_node!, add_edge!, remove_node!, remove_edge!, degree, neighbors
 function add_node!(g::Graph, v::Int)
     flag = v ∈ g.nodes
     if !flag
@@ -62,6 +70,7 @@ function remove_node!(g::Graph, v::Int)
         for u in g.nodes
             if v in g.adj[u]
                 delete!(g.adj[u], v)
+                g.nE -= 1
             end
         end
     end
@@ -72,12 +81,12 @@ function remove_edge!(g::Graph, e::Tuple{Int, Int})
     flag = e[1] in g.nodes && e[2] in g.nodes
     if flag
         delete!(g.adj[e[1]], e[2])
-        delete!(g.adj[e[2]], e[1])
         g.nE -= 1
     end
     return flag
 end
 remove_edge!(g::Graph, u::Int, v::Int) = remove_edge!(g, (u, v))
+neighbors(g::Graph, u::Int) = g.adj[u]
 
 function add_edge!(g::Graph, e::Tuple{Int, Int})
     flag = e[1] in g.nodes && e[2] in g.nodes
@@ -97,4 +106,10 @@ function degree(g::Graph, v::Int)
     end
 end
 
-end # NaiveGraph module
+
+# sample graph
+export sample_graph
+function sample_graph()
+    g = Graph([(1, 2), (1, 5), (2, 4), (2, 5), (2, 6), (3, 5), (4, 5), (5, 6)])
+    g
+end
