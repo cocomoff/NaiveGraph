@@ -2,3 +2,9 @@ name = "NaiveGraph"
 uuid = "d3601a5c-b0d0-4017-b7b5-3eb406a56a13"
 authors = ["cocomoff <keisuke.otaki.jp@gmail.com>"]
 version = "0.1.0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

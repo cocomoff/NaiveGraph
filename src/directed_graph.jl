@@ -1,3 +1,4 @@
+export DiGraph, copy
 mutable struct DiGraph <: AbstractGraph
     nV::Int
     nE::Int
@@ -78,21 +79,40 @@ function remove_edge!(g::DiGraph, e::Tuple{Int, Int})
     return flag
 end
 remove_edge!(g::DiGraph, u::Int, v::Int) = remove_edge!(g, (u, v))
-in_neighbors(g::DiGraph, u::Int) = g.adj[u]
+out_neighbors(g::DiGraph, u::Int) = g.adj[u]
+function in_neighbors(g::DiGraph, u::Int)
+    ans = Set{Int}()
+    for v in g.nodes
+        if v != u && u in g.adj[v]
+            push!(ans, v)
+        end
+    end
+    return ans
+end
 
 function add_edge!(g::DiGraph, e::Tuple{Int, Int})
     flag = e[1] in g.nodes && e[2] in g.nodes
     if flag
-        push!(g.adj[e[1]], e[2])
-        g.nE += 1
+        if e[2] ∉ g.adj[e[1]]
+            push!(g.adj[e[1]], e[2])
+            g.nE += 1
+        end
     end
     return flag
 end
 add_edge!(g::DiGraph, u::Int, v::Int) = add_edge!(g, (u, v))
 
-function degree(g::DiGraph, v::Int)
+function out_degree(g::DiGraph, v::Int)
     if v in g.nodes
         return length(g.adj[v])
+    else
+        return -1
+    end
+end
+
+function in_degree(g::DiGraph, v::Int)
+    if v in g.nodes
+        return length(in_degree(g, v))
     else
         return -1
     end
