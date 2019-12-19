@@ -33,7 +33,8 @@ function copy(g::DiGraph)
     DiGraph(g.nV, g.nE, deepcopy(g.nodes), deepcopy(g.adj))
 end
 
-export add_node!, add_edge!, remove_node!, remove_edge!, degree, neighbors
+export add_node!, add_edge!, remove_node!, remove_edge!,
+out_neighbors, in_neighbors, out_degree, in_degree
 function add_node!(g::DiGraph, v::Int)
     flag = v ∈ g.nodes
     if !flag
@@ -112,7 +113,7 @@ end
 
 function in_degree(g::DiGraph, v::Int)
     if v in g.nodes
-        return length(in_degree(g, v))
+        return length(in_neighbors(g, v))
     else
         return -1
     end
